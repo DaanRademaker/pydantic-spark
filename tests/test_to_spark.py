@@ -44,6 +44,9 @@ class TestModel(SparkBase):
     c9: Optional[UUID]
     c10: Dict[str, str]
     c11: dict
+    c12: str | None = "blah"
+    c13: Optional[str] = "blah"
+    c14: str | None
 
 
 class ComplexTestModel(SparkBase):
@@ -90,13 +93,16 @@ def test_spark():
             StructField(
                 "c11", MapType(StringType(), StringType()), nullable=False, metadata={"parentClass": "TestModel"}
             ),
+            StructField("c12", StringType(), nullable=True, metadata={"default": "blah", "parentClass": "TestModel"}),
+            StructField("c13", StringType(), nullable=True, metadata={"default": "blah", "parentClass": "TestModel"}),
+            StructField("c14", StringType(), nullable=True, metadata={"parentClass": "TestModel"}),
         ]
     )
     result = TestModel.spark_schema()
     assert result == json.loads(expected_schema.json())
     # Reading schema with spark library to be sure format is correct
     schema = StructType.fromJson(result)
-    assert len(schema.fields) == 11
+    assert len(schema.fields) == 14
 
 
 # def test_spark_write():

@@ -140,7 +140,7 @@ class SparkBase(BaseModel):
                 metadata["parentClass"] = s.get("title")
                 struct_field = {
                     "name": key,
-                    "nullable": "default" not in metadata and value.get("anyOf") is not None,
+                    "nullable": {"type": "null"} in value.get("anyOf", []),
                     "metadata": metadata,
                     "type": spark_type,
                 }
